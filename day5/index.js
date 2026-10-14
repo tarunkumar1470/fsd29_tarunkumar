@@ -1,72 +1,41 @@
-
+const prodContainer = document.getElementById("prod-container");
 let products = [];
 
-const getProductsData = async () => {
-    try {
-        const response = await fetch("https://dummyjson.com/products");
+const showProducts = async () => {
+    const res = await fetch("https://dummyjson.com/products");
+    const data = await res.json();
+    products = data.products;
+   
+    products.map((product)=>{
+        const div = document.createElement("div");
 
-        const data = await response.json();
+        const img = document.createElement("img");
+        img.src = product.thumbnail;
+        img.alt = "product img here"
 
-        products = data.products;
+        const title = document.createElement("h1");
+        title.innerText = product.title;
 
-        console.log(products);
+        const price = document.createElement("h2");
+        price.innerText = `$${product.price}`;
 
-        products.map((product) => {
-            const productContainer =
-                document.getElementById("products-container");
+        const incrementBtn = document.createElement("button");
+        incrementBtn.innerText = "+";
 
-            const div = document.createElement("div");
+        const decrementBtn = document.createElement("button");
+        decrementBtn.innerText = "-";
 
-            const img = document.createElement("img");
-            img.src = product.thumbnail;
-            img.alt = "product-image";
+        const span = document.createElement("span");
+        span.innerText = "ADD";
 
-            const title = document.createElement("h1");
-            title.innerText = product.title;
+        div.appendChild(img);
+        div.appendChild(title);
+        div.appendChild(price);
+        div.appendChild(decrementBtn);
+        div.appendChild(span);
+        div.appendChild(incrementBtn);
 
-            const price = document.createElement("h2");
-            price.innerText = `$${product.price}`;
-
-            const decrementBtn = document.createElement("button");
-            decrementBtn.innerText = "-";
-
-            const incrementBtn = document.createElement("button");
-            incrementBtn.innerText = "+";
-
-            const span = document.createElement("span");
-            span.innerText = "ADD";
-
-            div.appendChild(img);
-            div.appendChild(title);
-            div.appendChild(price);
-            div.appendChild(decrementBtn);
-            div.appendChild(span);
-            div.appendChild(incrementBtn);
-
-            productContainer.appendChild(div);
-
-            let count = 0;
-
-            incrementBtn.addEventListener("click", () => {
-                count++;
-                span.innerText = count;
-
-                localStorage.setItem("image", product.thumbnail);
-                localStorage.setItem("title", product.title);
-                localStorage.setItem("price", product.price);
-            });
-
-            decrementBtn.addEventListener("click", () => {
-                if (count > 0) {
-                    count--;
-                    span.innerText = count;
-                }
-            });
-        });
-    } catch (error) {
-        console.log("Error:", error);
-    }
-};
-
-getProductsData();
-```
+        prodContainer.appendChild(div);
+    })
+}
+showProducts();
